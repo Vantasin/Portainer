@@ -12,8 +12,8 @@ fi
 
 # Set defaults if vars aren't defined
 ZPOOL="${ZPOOL}"                          # tank
-DATASET_PATH="${PORTAINER_DATASET_PATH}"  # docker/volumes/portainer/data
-DATASET="${PORTAINER_DATASET}"            # tank/docker/volumes/portainer/data
+DATASET_PATH="${PORTAINER_DATASET_PATH}"  # docker/volumes/portainer
+DATASET="${PORTAINER_DATASET}"            # tank/docker/volumes/portainer
 
 # Use zfs to verify and create dataset
 if ! command -v zfs >/dev/null 2>&1; then

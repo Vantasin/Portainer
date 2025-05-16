@@ -9,6 +9,6 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${PORTAINER_DATA_VOLUME}:/data
+      - ${PORTAINER_DATA_VOLUME}/data:/data
     ports:
       - "${PORTAINER_PORT}:9000"
