@@ -100,6 +100,8 @@ http://localhost:9000
 
 Or replace `localhost` with your server’s IP and the `PORTAINER_PORT` you defined in `.env`.
 
+> **Note:** Consider using [Nginx Proxy Manager](https://github.com/Vantasin/Nginx-Proxy-Manager.git) as a reverse proxy for HTTPS certificates via Let's Encrypt.
+
 ---
 
 ## 🤖 Optional: Ansible Integration
