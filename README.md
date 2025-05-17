@@ -28,8 +28,8 @@ It supports optional ZFS integration for advanced users who want to mount Portai
 ### 📦 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/portainer-zfs.git
-cd portainer-zfs
+git clone https://github.com/Vantasin/Portainer.git
+cd Portainer
 ```
 
 ### ⚙️ 2. Set Up the `.env` File
