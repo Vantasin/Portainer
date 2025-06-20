@@ -1,0 +1,38 @@
+---
+name: Deploy Portainer
+
+when:
+  event:
+    - push
+
+steps:
+  - name: git-pull
+    image: alpine/git
+    volumes:
+      - /tank:/tank
+    commands:
+      - git config --global --add safe.directory /tank/docker/compose/Portainer
+      - git -C /tank/docker/compose/Portainer pull origin main
+
+  - name: render-env
+    image: alpine:latest
+    volumes:
+      - /tank:/tank
+    environment:
+      PORTAINER_PORT:9000
+      PORTAINER_DATA_VOLUME:/tank/docker/data/Portainer/data
+    commands:
+      - apk add --no-cache gettext
+      - cd /tank/docker/compose/Portainer
+      - envsubst < env.template > .env
+      - chmod 600 .env
+
+  - name: restart-compose
+    image: docker:cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tank:/tank
+    commands:
+      - cd /tank/docker/compose/Portainer
+      - docker compose down
+      - docker compose up -d

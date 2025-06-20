@@ -1,89 +1,87 @@
-# 🐳 Portainer Docker Stack with Optional ZFS Integration
+# 📦 Portainer Docker Compose Stack
+
+[![MIT License](https://img.shields.io/github/license/Vantasin/Portainer?style=flat-square)](LICENSE)
+[![Woodpecker CI](https://img.shields.io/badge/Woodpecker%20CI-self--hosted-green?logo=drone&style=flat-square)](https://woodpecker-ci.org/)
+[![Docker Pulls: portainer/portainer-ce](https://img.shields.io/docker/pulls/portainer/portainer-ce?style=flat-square&logo=docker)](https://hub.docker.com/r/portainer/portainer-ce)
 
 This repository provides a self-contained Docker Compose stack to run [Portainer CE](https://www.portainer.io/), a lightweight UI for managing Docker environments.
 
-It supports optional ZFS integration for advanced users who want to mount Portainer data volumes onto a ZFS dataset, while remaining fully usable without ZFS.
-
 ---
 
-## 📁 Features
-
-- 🐳 Deploys `portainer/portainer-ce:latest` via Docker Compose
-- 🔐 Environment-configurable volumes and ports via `.env`
-- 🧪 Includes `preflight.sh` to verify and create ZFS datasets if needed
-- ⚙️ Compatible with Ansible templating for infrastructure automation
-
----
-
-## ⚙️ Requirements
-
-- Docker and Docker Compose installed on your system
-- (Optional) ZFS installed if you plan to use ZFS volumes
-- (Optional) Ansible to manage environment variables
-
----
-
-## 🚀 Usage
-
-### 📦 1. Clone the Repository
+## 📁 Directory Structure
 
 ```bash
-git clone https://github.com/Vantasin/Portainer.git
-cd Portainer
-```
-
-### ⚙️ 2. Set Up the `.env` File
-
-```bash
-cp env.example .env
-nano .env
-```
-
-Edit the `.env` file to match your setup:
-
-```dotenv
-PORTAINER_PORT=9000
-
-# If using ZFS (required by preflight.sh):
-ZPOOL=tank
-PORTAINER_DATASET_PATH=docker/volumes/portainer/data
-PORTAINER_DATASET=tank/docker/volumes/portainer/data
-PORTAINER_DATA_VOLUME=/tank/docker/volumes/portainer/data
-
-# If NOT using ZFS, set:
-# PORTAINER_DATA_VOLUME=./data
+tank/
+├── docker/
+│   ├── compose/
+│   │   └── portainer/              # Git repo lives here
+│   │       ├── docker-compose.yml  # Main Docker Compose config
+│   │       ├── .env                # Runtime environment variables and secrets (gitignored!)
+│   │       ├── env.example         # Example .env file for reference
+│   │       ├── env.template        # Optional template
+│   │       ├── .woodpecker.yml     # CI/CD pipeline definition for auto-deploy
+│   │       └── README.md           # This file
+│   └── data/
+│       └── portainer/              # Volume mounts and persistent data
 ```
 
 ---
 
-## 🧰 Option A: Run with ZFS
+## 🧰 Prerequisites
 
-> Ideal for setups where your Docker volumes are backed by a ZFS pool.
+* Docker Engine
+* Docker Compose V2
+* Git
+* (Optional) ZFS on Linux for dataset management
 
-1. Ensure your ZFS pool exists and ZFS is installed:
-   ```bash
-   zpool list
-   ```
-
-2. Run the preflight script to validate or create the dataset:
-   ```bash
-   ./preflight.sh
-   ```
-
-3. Launch the stack:
-   ```bash
-   docker compose up -d
-   ```
+> ⚠️ **Note:** These instructions assume your ZFS pool is named `tank`. If your pool has a different name (e.g., `rpool`, `zdata`, etc.), replace `tank` in all paths and commands with your actual pool name.
 
 ---
 
-## 📦 Option B: Run without ZFS
+## ⚙️ Setup Instructions
 
-> For typical Docker setups or development environments.
+1. **Create the stack directory and clone the repository**
 
-1. Set `PORTAINER_DATA_VOLUME=./data` in your `.env`.
+   If using ZFS:
+   ```bash
+   sudo zfs create -p tank/docker/compose/Portainer
+   cd /tank/docker/compose/Portainer
+   sudo git clone https://github.com/Vantasin/Portainer.git .
+   ```
 
-2. Launch the stack:
+   If using standard directories:
+   ```bash
+   mkdir -p ~/docker/compose/Portainer
+   cd ~/docker/compose/Portainer
+   git clone https://github.com/Vantasin/Portainer.git .
+   ```
+
+2. **Create the runtime data directory** (optional)
+
+   If using ZFS:
+   ```bash
+   sudo zfs create -p tank/docker/data/Portainer
+   ```
+
+   If using standard directories:
+   ```bash
+   mkdir -p ~/docker/data/Portainer
+   ```
+
+3. **Configure environment variables**
+
+   Copy and modify the `.env` file:
+
+   ```bash
+   sudo cp env.example .env
+   sudo nano .env
+   sudo chmod 600 .env
+   ```
+
+   > Alternatively generate the `.env` file using the `env.template` template with Woodpecker CI's `.woodpecker.yml`.
+
+4. **Start Portainer**
+
    ```bash
    docker compose up -d
    ```
@@ -104,39 +102,14 @@ Or replace `localhost` with your server’s IP and the `PORTAINER_PORT` you defi
 
 ---
 
-## 🤖 Optional: Ansible Integration
+## 🚀 Continuous Deployment with Woodpecker
 
-Use `env.j2` to generate `.env` using Ansible. If your Ansible role is templating per stack, you might even do:
+This project includes a `.woodpecker.yml` pipeline for automated deployment using [Woodpecker CI](https://woodpecker-ci.org/).
 
-```yaml
-- name: Template .env for {{ stack.name }}
-  template:
-    src: "{{ compose_root }}/{{ stack.name }}/env.j2"
-    dest: "{{ compose_root }}/{{ stack.name }}/.env"
-```
-
-Where compose_root is /tank/docker/compose.
-
-This allows you to inject variables like `portainer_port`, `zfs_pool`, and `portainer_dataset_path` from Ansible inventory or vault.
-
----
-
-## 📄 File Overview
-
-| File                 | Description                                           |
-|----------------------|-------------------------------------------------------|
-| `docker-compose.yml` | Portainer container definition                        |
-| `env.example`        | Example environment file for local overrides          |
-| `env.j2`             | Ansible template for generating `.env`                |
-| `preflight.sh`       | Optional script to prepare ZFS dataset (if enabled)   |
-| `git_push.py`        | Helper script to stage, commit, and push to all remotes |
-| `summarize_codebase.sh` | Script to generate codebase summary                 |
-
----
-
-## 📝 License
-
-Licensed under the [MIT License](LICENSE).
+When changes are pushed to the Git repository:
+1. The pipeline is triggered by the Woodpecker server.
+2. The `.env` file is rendered from `env.template` using `envsubst`.
+3. The Docker Compose stack is restarted to apply updates.
 
 ---
 
@@ -144,4 +117,5 @@ Licensed under the [MIT License](LICENSE).
 
 - [Portainer](https://www.portainer.io/)
 - [Docker](https://www.docker.com/)
+- [Woodpecker CI](https://woodpecker-ci.org/)
 - [ZFS on Linux](https://openzfs.org/)
