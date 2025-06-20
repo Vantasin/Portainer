@@ -19,8 +19,8 @@ steps:
     volumes:
       - /tank:/tank
     environment:
-      PORTAINER_PORT:9000
-      PORTAINER_DATA_VOLUME:/tank/docker/data/Portainer/data
+      PORTAINER_PORT: 9000
+      PORTAINER_DATA_VOLUME: /tank/docker/data/Portainer/data
     commands:
       - apk add --no-cache gettext
       - cd /tank/docker/compose/Portainer
