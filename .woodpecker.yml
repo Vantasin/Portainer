@@ -5,7 +5,7 @@ when:
   event:
     - push
 
-steps:
+pipeline:
   - name: git-pull
     image: alpine/git
     volumes:
