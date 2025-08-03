@@ -90,11 +90,11 @@ tank/
 
 ## 🌐 Access Portainer
 
-Once running, open your browser to:
+Once deployed, access **Portainer** using:
 
-```
-https://portainer.example.com
-```
+- **Web Interface:** Enter the URL for Portainer. Eg. `https://portainer.example.com`.
+
+- **Initial Setup:** When you first access the web interface, you will be prompted to create an admin account.
 
 > **Note:** You must use [Nginx Proxy Manager](https://github.com/Vantasin/Nginx-Proxy-Manager.git) as a reverse proxy to access `Portainer`.
 
