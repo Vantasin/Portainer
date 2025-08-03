@@ -92,7 +92,7 @@ tank/
 
 Once deployed, access **Portainer** using:
 
-- **Web Interface:** Enter the URL for Portainer. Eg. `https://portainer.example.com`.
+- **Web Interface:** Enter the URL for **Portainer**. Eg. `https://portainer.example.com`.
 
 - **Initial Setup:** When you first access the web interface, you will be prompted to create an admin account.
 
