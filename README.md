@@ -18,8 +18,6 @@ tank/
 │   │       ├── docker-compose.yml  # Main Docker Compose config
 │   │       ├── .env                # Runtime environment variables and secrets (gitignored!)
 │   │       ├── env.example         # Example .env file for reference
-│   │       ├── env.template        # Optional template
-│   │       ├── .woodpecker.yml     # CI/CD pipeline definition for auto-deploy
 │   │       └── README.md           # This file
 │   └── data/
 │       └── portainer/              # Volume mounts and persistent data
@@ -56,7 +54,7 @@ tank/
    git clone https://github.com/Vantasin/Portainer.git .
    ```
 
-2. **Create the runtime data directory** (optional)
+2. **Create the runtime data directory**
 
    If using ZFS:
    ```bash
@@ -78,7 +76,7 @@ tank/
    sudo chmod 600 .env
    ```
 
-   > Alternatively generate the `.env` file using the `env.template` template with Woodpecker CI's `.woodpecker.yml`.
+   > **Note:** You only need to change the `.env` file if you are not using the default storage path.
 
 4. **Start Portainer**
 
@@ -93,23 +91,20 @@ tank/
 Once running, open your browser to:
 
 ```
-http://localhost:9000
+https://portainer.example.com
 ```
 
-Or replace `localhost` with your server’s IP and the `PORTAINER_PORT` you defined in `.env`.
+> **Note:** You must use [Nginx Proxy Manager](https://github.com/Vantasin/Nginx-Proxy-Manager.git) as a reverse proxy to access `Portainer`.
 
-> **Note:** Consider using [Nginx Proxy Manager](https://github.com/Vantasin/Nginx-Proxy-Manager.git) as a reverse proxy for HTTPS certificates via Let's Encrypt.
+> **Note:** Use `portainer` for the **Forward Hostname / IP** and `9000` for the **Forward Port**
 
----
-
-## 🚀 Continuous Deployment with Woodpecker
-
-This project includes a `.woodpecker.yml` pipeline for automated deployment using [Woodpecker CI](https://woodpecker-ci.org/).
-
-When changes are pushed to the Git repository:
-1. The pipeline is triggered by the Woodpecker server.
-2. The `.env` file is rendered from `env.template` using `envsubst`.
-3. The Docker Compose stack is restarted to apply updates.
+<p align="center">
+  <img
+    src="images/proxy-host.png"
+    alt="New Proxy Host UI"
+    style="width:50%; height:auto;"
+  />
+</p>
 
 ---
 
