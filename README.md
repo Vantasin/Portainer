@@ -1,8 +1,10 @@
 # 📦 Portainer Docker Compose Stack
 
 [![MIT License](https://img.shields.io/github/license/Vantasin/Portainer?style=flat-square)](LICENSE)
-[![Woodpecker CI](https://img.shields.io/badge/Woodpecker%20CI-self--hosted-green?logo=drone&style=flat-square)](https://woodpecker-ci.org/)
-[![Docker Pulls: portainer/portainer-ce](https://img.shields.io/docker/pulls/portainer/portainer-ce?style=flat-square&logo=docker)](https://hub.docker.com/r/portainer/portainer-ce)
+[![Docker Compose](https://img.shields.io/badge/Docker-Compose-blue?logo=docker)](https://www.docker.com/)
+[![ZFS](https://img.shields.io/badge/ZFS-OpenZFS-blue?style=flat-square)](https://openzfs.org/)
+
+[![Portainer](https://img.shields.io/badge/Portainer-Managed-blue?logo=portainer&logoColor=white)](https://www.portainer.io/)
 
 This repository provides a self-contained Docker Compose stack to run [Portainer CE](https://www.portainer.io/), a lightweight UI for managing Docker environments.
 
@@ -110,7 +112,7 @@ https://portainer.example.com
 
 ## 🙏 Acknowledgements
 
-- [Portainer](https://www.portainer.io/)
-- [Docker](https://www.docker.com/)
-- [Woodpecker CI](https://woodpecker-ci.org/)
-- [ZFS on Linux](https://openzfs.org/)
+- [ChatGPT](https://openai.com/chatgpt) for assistance in generating setup scripts and templates.
+- [Docker](https://www.docker.com/) for container orchestration and runtime.
+- [ZFS](https://openzfs.org/) for advanced local filesystem features, dataset organization, and snapshotting.
+- [Portainer](https://www.portainer.io/) — A powerful, open-source container management UI for Docker and Kubernetes.
